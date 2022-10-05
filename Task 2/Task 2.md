@@ -50,9 +50,3 @@
 4. Room(**StatNr**, <ins>RoomNr</ins>, #Beds)
 5. Patient(**PatientNr**, Name, Disease, DoctorNr, admission_to, admission_from)
 
-<style>
-    em{
-        font-style: normal;
-        text-decoration: underline;
-    }
- </style>
