@@ -1,3 +1,9 @@
+Task 1:
+```sql
+select employee_id, round((select max(e2.salary) from employees e2) / salary ,2) ratio
+from employees e 
+```
+
 Task 2:
 ```sql
 select employee_id, 
@@ -64,6 +70,6 @@ from
 	(select employee_id, last_name, salary,
 	ntile(5) over (order by salary) group_num
 	from employees
-	) as peoples
+	) as people
 order by last_name
 ```
