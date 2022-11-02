@@ -1,7 +1,7 @@
 Task 2:
 ```sql
 select employee_id, 
-round(salary/avg(salary) over (partition by department_id), 2) sal 
+round(salary/avg(salary) over (partition by department_id), 2) salary_ratio
 from employees
 ```
 
@@ -48,9 +48,22 @@ from (select
         man_id, 
         division, 
         score, 
-        dense_rank () over (partition by division order by score desc) rating
+        dense_rank() over (partition by division order by score desc) rating
 	from scores_zh_m) 
 as scores 
 where rating <= 3
 order by division, score desc
+```
+
+Task 6
+
+Tiled into 5 groups by salary. 
+```sql
+select employee_id, last_name, group_num, abs(salary - round(avg(salary) over (partition by group_num), 2)) as difference
+from
+	(select employee_id, last_name, salary,
+	ntile(5) over (order by salary) group_num
+	from employees
+	) as peoples
+order by last_name
 ```
