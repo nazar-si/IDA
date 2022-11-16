@@ -91,23 +91,24 @@ where
 
 Для пересечения двух месяцев:
 ```sql 
-select distinct 
-    u1.email, 
-    u2.email
-from
-    users u1
-    join subscription s1
-        on (s1.userEmail = u1.email)
-    join subscription s2
-        on (s1.forecastId = s2.forecastId)
-    join users u2
-        on (u2.email = s2.userEmail)
-where 
-    u1.email <> u2.email
-    and 
-    (
-        s1.startYear * 12 + s1.startMonth + s1.duration between s2.startYear * 12 + s2.startMonth and s2.startYear * 12 + s2.startMonth + s2.duration
-        or 
-        s1.startYear * 12 + s1.startMonth between s2.startYear * 12 + s2.startMonth and s2.startYear * 12 + s2.startMonth + s2.duration 
-    )
+select
+    first_user, second_user, count(total) as sum_total
+from (
+    select 
+        u1.email first_user, 
+        u2.email second_user,
+        max(0, min(s2.startYear * 12 + s2.startMonth + s2.duration - s1.startYear * 12 - s1.startMonth, s1.startYear * 12 + s1.startMonth + s1.duration - s2.startYear * 12 - s2.startMonth)) as intersection
+    from
+        users u1
+        join subscription s1
+            on (s1.userEmail = u1.email)
+        join subscription s2
+            on (s1.forecastId = s2.forecastId)
+        join users u2
+            on (u2.email = s2.userEmail)
+    where 
+        u1.email <> u2.email
+)
+group by u1.email, u2.email
+where sum_total >= 2
 ```
