@@ -95,8 +95,8 @@ select
     first_user, second_user, count(intersection) as sum_total
 from (
     select 
-        u1.email first_user, 
-        u2.email second_user,
+        u1.email as first_user, 
+        u2.email as second_user,
         max(0, min(s2.startYear * 12 + s2.startMonth + s2.duration - s1.startYear * 12 - s1.startMonth, s1.startYear * 12 + s1.startMonth + s1.duration - s2.startYear * 12 - s2.startMonth)) as intersection
     from
         users u1
@@ -111,4 +111,8 @@ from (
 )
 group by u1.email, u2.email
 where sum_total >= 2
+```
+Здесь длинная строчка находит пересечение в данной паре подписок:
+```sql
+max(0, min(s2.startYear * 12 + s2.startMonth + s2.duration - s1.startYear * 12 - s1.startMonth, s1.startYear * 12 + s1.startMonth + s1.duration - s2.startYear * 12 - s2.startMonth))
 ```
