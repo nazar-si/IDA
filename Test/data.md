@@ -92,7 +92,7 @@ where
 Для пересечения двух месяцев:
 ```sql 
 select
-    first_user, second_user, count(intersection) as sum_total
+    first_user, second_user, sum(intersection) as sum_total
 from (
     select 
         u1.email as first_user, 
